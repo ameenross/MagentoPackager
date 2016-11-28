@@ -1,0 +1,15 @@
+{
+    "name": "ameenross/magento_packager",
+    "description": "A tool to package Magento 1 extensions for Magento Connect.",
+    "type": "library",
+    "license": "GPL-2",
+    "authors": [
+        {
+            "name": "Ameen Ross",
+            "email": "a.ross@amdev.eu"
+        }
+    ],
+    "require": {
+        "pear/archive_tar": "^1.4"
+    }
+}
