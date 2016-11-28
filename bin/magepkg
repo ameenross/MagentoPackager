@@ -1,0 +1,35 @@
+#!/usr/bin/env php
+<?php
+// Make sure the script was invoked via CLI.
+if (PHP_SAPI != 'cli') {
+    echo 'Warning: Magento Packager must be invoked via the CLI version of PHP.' . PHP_EOL;
+    exit(1);
+}
+
+//require __DIR__ . '/../../autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
+
+use AmeenRoss\MagentoPackager\Packager;
+
+// Check if input file was given.
+if (empty($argv[1])) {
+    echo 'Error: missing input filename.' . PHP_EOL;
+    exit(1);
+} else {
+    // Use STDIN when `-` was given as filename.
+    $input = ($argv[1] == '-') ? 'php://stdin' : $argv[1];
+}
+
+// Check that STDIN is not a TTY.
+if (posix_isatty($input)) {
+    echo "Error: can't use a TTY as input. Please pipe a raw tarball." . PHP_EOL;
+    exit(1);
+}
+
+// Create packager instance.
+$packager = new Packager($input);
+
+// Get default metadata from magepkg.xml file, if it exists.
+if (file_exists('magepkg.xml')) {
+    $$packager->setMetadata(new SimpleXMLElement('magepkg.xml', 0, true));
+}
