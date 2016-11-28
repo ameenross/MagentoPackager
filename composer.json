@@ -10,6 +10,8 @@
         }
     ],
     "require": {
-        "pear/archive_tar": "^1.4"
+        "pear/archive_tar": "^1.4",
+        "squizlabs/php_codesniffer": "^2.7",
+        "apigen/apigen": "^4.1"
     }
 }
