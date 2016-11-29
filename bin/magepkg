@@ -59,4 +59,4 @@ if (file_exists('magepkg.xml')) {
 }
 
 // Create packager instance.
-$packager = new Packager($input, $arguments['output'], @$metadata);
+$packager = new Packager($input, @$arguments['output'], @$metadata);

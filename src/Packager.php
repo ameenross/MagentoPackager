@@ -29,14 +29,15 @@ class Packager
      * @param string $input
      *     The filename of the tar source file.
      * @param string $outputDirectory
-     *     The directory to output the resulting package file to.
+     *     (optional) The directory to output the resulting package file to.
+     *     Defaults to current working directory.
      * @param SimpleXMLElement $metadata
      *     (optional) Object with the package and release metadata.
      */
     public function __construct($input, $outputDirectory = '.', SimpleXMLElement $metadata = null)
     {
         $this->input = new Tar($input);
-        $this->outputDirectory = $outputDirectory;
+        $this->outputDirectory = rtrim($outputDirectory, '/');
         $this->initMetadata($metadata);
     }
 
