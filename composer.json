@@ -22,5 +22,5 @@
             "AmeenRoss\\MagentoPackager\\": ["src"]
         }
     },
-    "bin": ["bin/magepkg"],
+    "bin": ["bin/magepkg"]
 }
