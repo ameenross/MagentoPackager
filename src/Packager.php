@@ -102,7 +102,11 @@ class Packager
 
         // Create a temporary file with the content read from STDIN.
         $this->tempFile = tmpfile();
-        fwrite($this->tempFile, file_get_contents($input));
+        $stdin = fopen($input, 'rb');
+        while (!feof($stdin)) {
+            // Read/write 1024 bytes per iteration to conserve memory.
+            fwrite($this->tempFile, fread($stdin, 1024));
+        }
 
         // Return the filename of the temporary file.
         return stream_get_meta_data($this->tempFile)['uri'];
