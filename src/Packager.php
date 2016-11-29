@@ -37,7 +37,7 @@ class Packager
     {
         $this->input = new Tar($input);
         $this->outputDirectory = $outputDirectory;
-        $this->setMetadata($metadata);
+        $this->initMetadata($metadata);
     }
 
     /**
@@ -59,7 +59,7 @@ class Packager
 
         // Add the element's attributes.
         foreach ($attributes as $attribute => $value) {
-            $child->initAttribute($attribute, $value);
+            $child->setAttribute($attribute, $value);
         }
     }
 
