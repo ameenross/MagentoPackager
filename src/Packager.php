@@ -50,17 +50,17 @@ class Packager
 
         // Add the element's attributes.
         foreach ($attributes as $attribute => $value) {
-            $child->addAttribute($attribute, $value);
+            $child->initAttribute($attribute, $value);
         }
     }
 
     /**
-     * Set the package's metadata.
+     * Initialize the package's metadata.
      *
      * @param SimpleXMLElement $metadata
      *     (optional) Object with the package and release metadata.
      */
-    protected function setMetadata(SimpleXMLElement $metadata = null)
+    protected function initMetadata(SimpleXMLElement $metadata = null)
     {
         if (isset($metadata)) {
             // Store the given metadata on the object.
