@@ -34,7 +34,7 @@ use AmeenRoss\MagentoPackager\Packager;
 // Process CLI arguments.
 $arguments = getopt('', [
     'input:',
-    'output:'
+    'output:',
     'version:',
 ]);
 
