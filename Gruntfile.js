@@ -14,7 +14,7 @@ module.exports = function(grunt) {
             },
         },
         phplint: {
-            good: ['src/**/*.php'],
+            good: ['src/**/*.php', 'bin/magepkg'],
         },
         exec: {
             apigen: 'vendor/apigen/apigen/bin/apigen generate -s src/ -d docs/ --template-theme=bootstrap',
