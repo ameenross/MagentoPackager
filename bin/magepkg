@@ -46,10 +46,10 @@ if (posix_isatty($input)) {
     exit(1);
 }
 
-// Create packager instance.
-$packager = new Packager($input);
-
 // Get default metadata from magepkg.xml file, if it exists.
 if (file_exists('magepkg.xml')) {
-    $$packager->setMetadata(new SimpleXMLElement('magepkg.xml', 0, true));
+    $metadata = new SimpleXMLElement('magepkg.xml', 0, true);
 }
+
+// Create packager instance.
+$packager = new Packager($input, @$metadata);

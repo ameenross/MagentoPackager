@@ -12,6 +12,12 @@ class Packager
     protected $input;
 
     /**
+     * @var SimpleXMLElement $metadata
+     *     The metadata to store in the `package.xml`.
+     */
+    protected $metadata;
+
+    /**
      * Create an extension packager.
      *
      * @param string $input
@@ -26,12 +32,35 @@ class Packager
     }
 
     /**
+     * Add package metadata.
+     *
+     * @param string $element
+     *     The element to add to the metadata.
+     * @param string $value
+     *     (optional) The value of the element. If omitted, the function will
+     *     add a self-closing element.
+     * @param string[] $attributes
+     *     (optional) Any XML attributes to add to the element, as key-value
+     *     pairs.
+     */
+    public function addMetadata($element, $value = null, $attributes = [])
+    {
+        // Add the element.
+        $this->metadata->addChild($element, $value);
+
+        // Add the element's attributes.
+        foreach ($attributes as $attribute => $value) {
+            $this->metadata->{$element}->addAttribute($attribute, $value);
+        }
+    }
+
+    /**
      * Set the package's metadata.
      *
      * @param SimpleXMLElement $metadata
      *     (optional) Object with the package and release metadata.
      */
-    public function setMetadata(SimpleXMLElement $metadata = null)
+    protected function setMetadata(SimpleXMLElement $metadata = null)
     {
         if (isset($metadata)) {
             // Store the given metadata on the object.
