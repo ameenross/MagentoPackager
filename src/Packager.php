@@ -46,11 +46,11 @@ class Packager
     public function addMetadata($element, $value = null, $attributes = [])
     {
         // Add the element.
-        $this->metadata->addChild($element, $value);
+        $child = $this->metadata->addChild($element, $value);
 
         // Add the element's attributes.
         foreach ($attributes as $attribute => $value) {
-            $this->metadata->{$element}->addAttribute($attribute, $value);
+            $child->addAttribute($attribute, $value);
         }
     }
 
