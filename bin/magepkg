@@ -34,6 +34,7 @@ use AmeenRoss\MagentoPackager\Packager;
 // Process CLI arguments.
 $arguments = getopt('i:o:', [
     'version:',
+    'notes:',
 ]);
 
 // Defaults for missing arguments.
@@ -62,9 +63,10 @@ $packager = new Packager($input, $arguments['o'], @$metadata);
 // Set any long CLI arguments as package metadata.
 foreach ($arguments as $argument => $value) {
     // Skip short arguments.
-    if (strlen($argument) <= 1) {
-        continue;
+    if (strlen($argument) > 1) {
+        $packager->addMetadata($argument, $value);
     }
-
-    $packager->addMetadata($argument, $value);
 }
+
+// Create the package file.
+$packager->save();
