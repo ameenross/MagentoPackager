@@ -65,17 +65,6 @@ class Packager
     }
 
     /**
-     * Set the package's release version.
-     *
-     * @param string $version
-     *     The version identifier.
-     */
-    public function setVersion($version)
-    {
-        $this->metadata->version = $version;
-    }
-
-    /**
      * Saves the package.
      */
     public function save()

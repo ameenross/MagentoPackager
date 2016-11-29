@@ -58,3 +58,13 @@ if (file_exists('magepkg.xml')) {
 
 // Create packager instance.
 $packager = new Packager($input, $arguments['o'], @$metadata);
+
+// Set any long CLI arguments as package metadata.
+foreach ($arguments as $argument => $value) {
+    // Skip short arguments.
+    if (strlen($argument) <= 1) {
+        continue;
+    }
+
+    $packager->addMetadata($argument, $value);
+}

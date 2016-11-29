@@ -4,12 +4,10 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
         phpcs: {
             application: {
-                src: ['src/'],
+                src: ['src/', 'bin/magepkg'],
             },
             options: {
                 bin: 'vendor/bin/phpcs',
-                extensions: 'php',
-                ignore: '/node_modules,/vendor',
                 standard: 'PSR2',
             },
         },
