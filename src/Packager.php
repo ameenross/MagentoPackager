@@ -12,6 +12,13 @@ class Packager
     protected $input;
 
     /**
+     * @var resource $tempFile
+     *     The file handle of the temporary file containing the tarball, if the
+     *     tar comes from STDIN.
+     */
+    protected $tempFile;
+
+    /**
      * @var string $outputDirectory
      *     The directory to output the resulting package file to.
      */
@@ -36,7 +43,7 @@ class Packager
      */
     public function __construct($input, $outputDirectory = '.', SimpleXMLElement $metadata = null)
     {
-        $this->input = new Tar($input);
+        $this->input = new Tar($this->getInputFilename($input));
         $this->outputDirectory = rtrim($outputDirectory, '/');
         $this->initMetadata($metadata);
     }
@@ -75,6 +82,30 @@ class Packager
         // Output file with the correct naming convention:
         // "<directory>/Name-1.0.0.tgz".
         $output = new Tar("{$this->outputDirectory}/{$this->metadata->name}-{$this->metadata->version}.tgz");
+    }
+
+    /**
+     * Get the input filename.
+     *
+     * Makes sure a file from STDIN is handled properly, as that cannot be read
+     * from repeatedly.
+     *
+     * @param string $input
+     *     The filename of the tar source file.
+     */
+    protected function getInputFilename($input)
+    {
+        // If not STDIN, just return the filename as given.
+        if ($input != 'php://stdin') {
+            return $input;
+        }
+
+        // Create a temporary file with the content read from STDIN.
+        $this->tempFile = tmpfile();
+        fwrite($this->tempFile, file_get_contents($input));
+
+        // Return the filename of the temporary file.
+        return stream_get_meta_data($this->tempFile)['uri'];
     }
 
     /**
