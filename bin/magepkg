@@ -32,20 +32,18 @@ if (!$loaded) {
 use AmeenRoss\MagentoPackager\Packager;
 
 // Process CLI arguments.
-$arguments = getopt('', [
-    'input:',
-    'output:',
+$arguments = getopt('i:o:', [
     'version:',
 ]);
 
-// Check if input file was given.
-if (empty($arguments['input'])) {
-    echo 'Error: missing input filename.' . PHP_EOL;
-    exit(1);
-} else {
-    // Use STDIN when `-` was given as filename.
-    $input = ($arguments['input'] == '-') ? 'php://stdin' : $arguments['input'];
-}
+// Defaults for missing arguments.
+$arguments += [
+    'i' => '-',
+    'o' => './',
+];
+
+// Check input file. When `-`, was given, use STDIN.
+$input = ($arguments['i'] == '-') ? 'php://stdin' : $arguments['i'];
 
 // Check that STDIN is not a TTY.
 if (posix_isatty($input)) {
@@ -59,4 +57,4 @@ if (file_exists('magepkg.xml')) {
 }
 
 // Create packager instance.
-$packager = new Packager($input, @$arguments['output'], @$metadata);
+$packager = new Packager($input, $arguments['o'], @$metadata);
