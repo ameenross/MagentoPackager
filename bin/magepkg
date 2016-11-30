@@ -33,6 +33,7 @@ use AmeenRoss\MagentoPackager\Packager;
 
 // Process CLI arguments.
 $arguments = getopt('i:o:', [
+    'config:',
     'version:',
     'notes:',
 ]);
@@ -41,6 +42,7 @@ $arguments = getopt('i:o:', [
 $arguments += [
     'i' => '-',
     'o' => './',
+    'config' => 'magepkg.xml',
 ];
 
 // Check input file. When `-`, was given, use STDIN.
@@ -52,9 +54,9 @@ if (posix_isatty($input)) {
     exit(1);
 }
 
-// Get default metadata from magepkg.xml file, if it exists.
-if (file_exists('magepkg.xml')) {
-    $metadata = new SimpleXMLElement('magepkg.xml', 0, true);
+// Get default metadata from the config file, if it exists.
+if (file_exists($arguments['config'])) {
+    $metadata = new SimpleXMLElement($arguments['config'], 0, true);
 }
 
 // Create packager instance.
