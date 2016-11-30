@@ -73,6 +73,9 @@ class Packager
 
     /**
      * Saves the package.
+     *
+     * @todo Process files of input tar.
+     * @todo Add package.xml file.
      */
     public function save()
     {
