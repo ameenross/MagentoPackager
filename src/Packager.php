@@ -72,7 +72,7 @@ class Packager
     }
 
     /**
-     * Saves the package.
+     * Save the package.
      *
      * @todo Process files of input tar.
      * @todo Add package.xml file.
@@ -84,7 +84,32 @@ class Packager
 
         // Output file with the correct naming convention:
         // "<directory>/Name-1.0.0.tgz".
-        $output = new Tar("{$this->outputDirectory}/{$this->metadata->name}-{$this->metadata->version}.tgz");
+        $filename = "{$this->outputDirectory}/{$this->metadata->name}-{$this->metadata->version}.tgz";
+
+        // Remove file if it already exists.
+        if (is_file($filename)) {
+            unlink($filename);
+        }
+
+        $output = new Tar($filename);
+
+        // Iterate over the content in the input tarball.
+        foreach ($this->input->listContent() as $node) {
+            // Add the files/folders to the output file.
+            $output->addString(
+                $node['filename'],
+                $this->input->extractInString($node['filename']),
+                false,
+                $node
+            );
+        }
+
+        // Add the package.xml to the output file.
+        $output->addString('package.xml', $this->metadata->asXML(), false, [
+            'mode' => 0664,
+            'uid' => getmyuid(),
+            'gid' => getmygid(),
+        ]);
     }
 
     /**
