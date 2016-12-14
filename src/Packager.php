@@ -54,8 +54,7 @@ class Packager
      * @param string $element
      *     The element to add to the metadata.
      * @param string $value
-     *     (optional) The value of the element. If omitted, the function will
-     *     add a self-closing element.
+     *     (optional) The value of the element.
      * @param string[] $attributes
      *     (optional) Any XML attributes to add to the element, as key-value
      *     pairs.
