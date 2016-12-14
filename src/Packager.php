@@ -72,9 +72,6 @@ class Packager
 
     /**
      * Save the package.
-     *
-     * @todo Process files of input tar.
-     * @todo Add package.xml file.
      */
     public function save()
     {
@@ -91,17 +88,28 @@ class Packager
         }
 
         $output = new Tar($filename);
+        $files = [];
 
         // Iterate over the content in the input tarball.
         foreach ($this->input->listContent() as $node) {
+            $fileContent = $this->input->extractInString($node['filename']);
+
             // Add the files/folders to the output file.
             $output->addString(
                 $node['filename'],
-                $this->input->extractInString($node['filename']),
+                $fileContent,
                 false,
                 $node
             );
+
+            // Keep track of all files and their hashes.
+            if ($node['typeflag'] == 0) {
+                $files[] = $this->getTarget($node['filename']) + ['hash' => md5($fileContent)];
+            }
         }
+
+        // Add the actual file metadata.
+        $this->processFiles($files);
 
         // Add the package.xml to the output file.
         $output->addString('package.xml', $this->metadata->asXML(), false, [
@@ -162,6 +170,60 @@ class Packager
      * @todo Still a stub.
      */
     protected function validateMetadata()
+    {
+    }
+
+    /**
+     * Get target name for a file.
+     *
+     * @param string $filename
+     *
+     * @return array
+     *     An array with keys:
+     *     - target: the name of the target directory.
+     *     - path: the path relative to the target directory.
+     */
+    protected function getTarget($filename)
+    {
+        $map = [
+            'app/code/community/' => 'magecommunity',
+            'app/code/core/' => 'magecore',
+            'app/code/local/' => 'magelocal',
+            'app/design/' => 'magedesign',
+            'app/etc/' => 'mageetc',
+            'app/locale/' => 'magelocale',
+            'lib/' => 'magelib',
+            'media/' => 'magemedia',
+            'skin/' => 'mageskin',
+            'Test/' => 'magetest',
+        ];
+
+        // Iterate over the map to find a match.
+        foreach ($map as $targetPath => $targetName) {
+            // If the target path is found at the start of the filename, it's a
+            // match.
+            if (strpos($filename, $targetPath) === 0) {
+                return [
+                    'target' => $targetName,
+                    'path' => substr($filenam, strlen($targetPath)),
+                ];
+            }
+        }
+    }
+
+    /**
+     * Add files to the package's metadata.
+     *
+     * @param array[] $files
+     *     A list of files that are part of the package. A file is described as
+     *     an array with these keys:
+     *     - target: the name of the target directory.
+     *     - path: the path relative to the target directory.
+     *     - hash: the md5 hash of the file.
+     *
+     * @todo Still a stub.
+     */
+    protected function processFiles(array $files)
     {
     }
 }
