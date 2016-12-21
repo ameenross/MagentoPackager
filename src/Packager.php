@@ -225,5 +225,10 @@ class Packager
      */
     protected function processFiles(array $files)
     {
+        // First group files by target.
+        $targets = [];
+        foreach ($files as $file) {
+            $targets[$file['target']] = $file;
+        }
     }
 }
