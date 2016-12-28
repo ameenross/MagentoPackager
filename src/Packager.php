@@ -220,15 +220,52 @@ class Packager
      *     - target: the name of the target directory.
      *     - path: the path relative to the target directory.
      *     - hash: the md5 hash of the file.
-     *
-     * @todo Still a stub.
      */
     protected function processFiles(array $files)
     {
-        // First group files by target.
+        // Recursive closure to get the direct parent element of the file.
+        // Creates the parent elements if they don't exist.
+        $getDirectParentElement = function ($element, $parents) use (&$getDirectParentElement) {
+            // Process the first parent on the stack.
+            $parent = array_shift($parents);
+
+            // Check if the parent exists.
+            if (!$parentElement = @$element->xpath("dir[@name='{$parent}']")[0]) {
+                // Create the parent.
+                $parentElement = $element->addChild('dir');
+                $parentElement->addAttribute('name', $parent);
+            }
+
+            // If there are still parents on the stack, recurse.
+            if ($parents) {
+                $parentElement = $getDirectParentElement($parentElement, $parents);
+            }
+
+            // This is the direct parent element, so return it.
+            return $parentElement;
+        };
+
+        // Iterate over the files, keeping track of the target elements added.
         $targets = [];
         foreach ($files as $file) {
-            $targets[$file['target']] = $file;
+            // If this target is new, add the target element for it.
+            if (!array_key_exists($file['target'], $targets)) {
+                $targets[$file['target']] = $this->metadata->contents->addChild('target');
+                $targets[$file['target']]->addAttribute('name', $file['target']);
+            }
+
+            // Break up the path into an array of parent directories and the
+            // filename.
+            $parents = explode('/', pathinfo($file['path'])['dirname']);
+            $filename = pathinfo($file['path'])['basename'];
+
+            // Get the direct parent.
+            $directParent = $getDirectParentElement($targets[$file['target']], $parents);
+
+            // Add the file metadata.
+            $fileElement = $directParent->addChild('file');
+            $fileElement->addAttribute('name', $filename);
+            $fileElement->addAttribute('hash', $file['hash']);
         }
     }
 }
