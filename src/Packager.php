@@ -208,6 +208,12 @@ class Packager
                     'path' => substr($filenam, strlen($targetPath)),
                 ];
             }
+
+            // If no match was found, use the "catch-all" target.
+            return [
+                'target' => 'mage',
+                'path' => $filename,
+            ];
         }
     }
 
