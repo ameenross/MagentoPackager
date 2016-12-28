@@ -40,6 +40,7 @@ $metadataArguments = [
 // Process CLI arguments.
 $arguments = getopt('i:o:', array_merge([
     'config:',
+    'release-date:',
 ], array_map(
     function ($item) {
         return "{$item}:";
@@ -52,6 +53,7 @@ $arguments += [
     'i' => '-',
     'o' => './',
     'config' => 'magepkg.xml',
+    'release-date' => 'now',
 ];
 
 // Check input file. When `-`, was given, use STDIN.
@@ -75,6 +77,9 @@ $packager = new Packager($input, $arguments['o'], @$metadata);
 foreach (array_intersect_key($arguments, array_flip($metadataArguments)) as $argument => $value) {
     $packager->addMetadata($argument, $value);
 }
+
+// Set package release date.
+$packager->setReleaseDate(new DateTime($arguments['release-date']));
 
 // Create the package file.
 $packager->save();

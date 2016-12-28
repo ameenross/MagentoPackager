@@ -1,6 +1,7 @@
 <?php namespace AmeenRoss\MagentoPackager;
 
 use Archive_Tar as Tar;
+use DateTime;
 use SimpleXMLElement;
 
 class Packager
@@ -46,6 +47,18 @@ class Packager
         $this->input = new Tar($this->getInputFilename($input));
         $this->outputDirectory = rtrim($outputDirectory, '/');
         $this->initMetadata($metadata);
+    }
+
+    /**
+     * Set the package's release date metadata.
+     *
+     * @param DateTime $date
+     *     The release date.
+     */
+    public function setReleaseDate(DateTime $date)
+    {
+        $this->metadata->date = $date->format('Y-m-d');
+        $this->metadata->time = $date->format('H:i:s');
     }
 
     /**
