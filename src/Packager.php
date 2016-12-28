@@ -100,6 +100,10 @@ class Packager
             unlink($filename);
         }
 
+        // Create the archive, making sure the containing directory exists.
+        if (!is_dir($this->outputDirectory)) {
+            mkdir($this->outputDirectory, 0777, true);
+        }
         $output = new Tar($filename);
         $files = [];
 
