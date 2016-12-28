@@ -262,8 +262,8 @@ class Packager
 
             // Break up the path into an array of parent directories and the
             // filename.
-            $parents = explode('/', pathinfo($file['path'])['dirname']);
-            $filename = pathinfo($file['path'])['basename'];
+            $parents = explode('/', pathinfo($file['path'], PATHINFO_DIRNAME));
+            $filename = pathinfo($file['path'], PATHINFO_BASENAME);
 
             // Get the direct parent.
             $directParent = $getDirectParentElement($targets[$file['target']], $parents);
