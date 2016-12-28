@@ -218,7 +218,7 @@ class Packager
             if (strpos($filename, $targetPath) === 0) {
                 return [
                     'target' => $targetName,
-                    'path' => substr($filenam, strlen($targetPath)),
+                    'path' => substr($filename, strlen($targetPath)),
                 ];
             }
         }
