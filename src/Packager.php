@@ -232,6 +232,12 @@ class Packager
         // Recursive closure to get the direct parent element of the file.
         // Creates the parent elements if they don't exist.
         $getDirectParentElement = function ($element, $parents) use (&$getDirectParentElement) {
+            // If there are no more parents, the current element is the direct
+            // parent.
+            if (!$parents) {
+                return $element;
+            }
+
             // Process the first parent on the stack.
             $parent = array_shift($parents);
 
@@ -242,13 +248,8 @@ class Packager
                 $parentElement->addAttribute('name', $parent);
             }
 
-            // If there are still parents on the stack, recurse.
-            if ($parents) {
-                $parentElement = $getDirectParentElement($parentElement, $parents);
-            }
-
-            // This is the direct parent element, so return it.
-            return $parentElement;
+            // Recurse.
+            return $getDirectParentElement($parentElement, $parents);
         };
 
         // Iterate over the files, keeping track of the target elements added.
