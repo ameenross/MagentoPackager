@@ -31,12 +31,21 @@ if (!$loaded) {
 
 use AmeenRoss\MagentoPackager\Packager;
 
+// Arguments only used for adding metadata.
+$metadataArguments = [
+    'notes',
+    'version',
+];
+
 // Process CLI arguments.
-$arguments = getopt('i:o:', [
+$arguments = getopt('i:o:', array_merge([
     'config:',
-    'version:',
-    'notes:',
-]);
+], array_map(
+    function ($item) {
+        return "{$item}:";
+    },
+    $metadataArguments
+)));
 
 // Defaults for missing arguments.
 $arguments += [
@@ -62,12 +71,9 @@ if (file_exists($arguments['config'])) {
 // Create packager instance.
 $packager = new Packager($input, $arguments['o'], @$metadata);
 
-// Set any long CLI arguments as package metadata.
-foreach ($arguments as $argument => $value) {
-    // Skip short arguments.
-    if (strlen($argument) > 1) {
-        $packager->addMetadata($argument, $value);
-    }
+// Set metadata CLI options as the package metadata.
+foreach (array_intersect_key($arguments, array_flip($metadataArguments)) as $argument => $value) {
+    $packager->addMetadata($argument, $value);
 }
 
 // Create the package file.
