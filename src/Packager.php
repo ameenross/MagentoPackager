@@ -261,8 +261,10 @@ class Packager
             }
 
             // Break up the path into an array of parent directories and the
-            // filename.
-            $parents = explode('/', pathinfo($file['path'], PATHINFO_DIRNAME));
+            // filename. Make sure files in root have an empty array of parents
+            // instead of an array with a dot.
+            $dirname = pathinfo($file['path'], PATHINFO_DIRNAME);
+            $parents = ($dirname == '.') ? [] : explode('/', $dirname);
             $filename = pathinfo($file['path'], PATHINFO_BASENAME);
 
             // Get the direct parent.
