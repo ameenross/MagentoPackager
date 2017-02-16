@@ -57,5 +57,5 @@ metadata corresponds to your package:
 extension. It also needs to be told where to store the resulting package (if not
 in the current working directory), its version and any release notes. Example:
 ```sh
-git archive HEAD | vendor/bin/magepkg --version="1.0.0" --notes="First stable release."
+git archive HEAD | vendor/bin/magepkg -o releases/ --version="1.0.0" --notes="First stable release."
 ```
