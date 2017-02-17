@@ -68,7 +68,7 @@ class Packager
      *     The element to add to the metadata.
      * @param string $value
      *     (optional) The value of the element.
-     * @param string[] $attributes
+     * @param array $attributes
      *     (optional) Any XML attributes to add to the element, as key-value
      *     pairs.
      */
