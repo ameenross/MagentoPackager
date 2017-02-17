@@ -7,6 +7,17 @@
 
 A tool to package Magento 1 extensions for Magento Connect.
 
+# Rationale
+
+Packaging extensions for Magento 1 is an old-fashioned and cumbersome process of
+logging into the backend of a Magento installation, where the extension must be
+installed. Then one has to fill in a large form for every single release, even
+though most of the data usually doesn't change at all. Also, you have to
+manually add the files that comprise your package...
+
+What madness! Let's automate the packaging process with a script that's as easy
+to install and use as any other Composer package! Enter **MagentoPackager**.
+
 # Installation
 
 ```sh
